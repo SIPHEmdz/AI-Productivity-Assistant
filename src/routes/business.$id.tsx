@@ -43,11 +43,11 @@ function BusinessPage() {
   const following = !!mine && followers?.some((f) => f.follower_business_id === mine.id);
 
   async function toggleFollow() {
-    if (!mine) return toast.error("Set up your business first to follow others");
+    if (!mine) { toast.error("Set up your business first to follow others"); return; }
     const res = following
       ? await supabase.from("follows").delete().eq("follower_business_id", mine.id).eq("followed_business_id", id)
       : await supabase.from("follows").insert({ follower_business_id: mine.id, followed_business_id: id });
-    if (res.error) return toast.error(res.error.message);
+    if (res.error) { toast.error(res.error.message); return; }
     qc.invalidateQueries({ queryKey: ["follows", id] });
   }
 

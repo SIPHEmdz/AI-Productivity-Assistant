@@ -89,11 +89,11 @@ function ProfileForm({ existing }: { existing?: Business }) {
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    if (!f.name.trim()) return toast.error("Business name is required");
+    if (!f.name.trim()) { toast.error("Business name is required"); return; }
     const res = existing
       ? await supabase.from("businesses").update(f).eq("id", existing.id)
       : await supabase.from("businesses").insert({ ...f, owner_id: user!.id });
-    if (res.error) return toast.error(res.error.message);
+    if (res.error) { toast.error(res.error.message); return; }
     toast.success(existing ? "Profile updated" : "Welcome to the network!");
     qc.invalidateQueries();
   }
@@ -132,11 +132,11 @@ function Listings({ business }: { business: Business }) {
 
   async function add(e: React.FormEvent) {
     e.preventDefault();
-    if (!f.title || !f.unit || !f.price) return toast.error("Title, unit and price are required");
+    if (!f.title || !f.unit || !f.price) { toast.error("Title, unit and price are required"); return; }
     const { error } = await supabase.from("supply_listings").insert({
       business_id: business.id, title: f.title, unit: f.unit, price: Number(f.price), min_order: Number(f.min_order) || 1, description: f.description || null,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setF({ title: "", unit: "", price: "", min_order: "1", description: "" });
     toast.success("Listing added to the Supply Market");
     refresh();
@@ -202,7 +202,7 @@ function Requests({ business }: { business: Business }) {
 
   async function setStatus(id: string, status: "accepted" | "declined") {
     const { error } = await supabase.from("supply_requests").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["requests"] });
   }
 
@@ -273,12 +273,12 @@ function Opps({ business }: { business: Business }) {
 
   async function post(e: React.FormEvent) {
     e.preventDefault();
-    if (!f.title.trim()) return toast.error("Add a title");
+    if (!f.title.trim()) { toast.error("Add a title"); return; }
     const { error } = await supabase.from("opportunities").insert({
       business_id: business.id, type: f.type, title: f.title, description: f.description || null,
       budget: f.budget ? Number(f.budget) : null, event_date: f.event_date || null, location: f.location || null,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setF({ type: "collaboration", title: "", description: "", budget: "", event_date: "", location: "" });
     toast.success("Posted to the Opportunity Board");
     qc.invalidateQueries({ queryKey: ["opportunities"] });

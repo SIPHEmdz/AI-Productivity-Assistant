@@ -24,9 +24,9 @@ export function RequestSupplyDialog({ listing }: { listing: Listing }) {
   if (business.id === listing.business_id) return <span className="text-xs text-muted-foreground">Your listing</span>;
 
   async function send() {
-    if (qty < listing.min_order) return toast.error(`Minimum order is ${listing.min_order}`);
+    if (qty < listing.min_order) { toast.error(`Minimum order is ${listing.min_order}`); return; }
     const { error } = await supabase.from("supply_requests").insert({ listing_id: listing.id, buyer_business_id: business!.id, quantity: qty, message: msg || null });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Request sent to supplier");
     qc.invalidateQueries({ queryKey: ["requests"] });
     setOpen(false);

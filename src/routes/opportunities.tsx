@@ -78,7 +78,7 @@ function ApplyButton({ oppId, posterId }: { oppId: string; posterId: string }) {
 
   async function apply() {
     const { error } = await supabase.from("opportunity_applications").insert({ opportunity_id: oppId, applicant_business_id: business!.id, message: msg || null });
-    if (error) return toast.error(error.code === "23505" ? "You've already applied" : error.message);
+    if (error) { toast.error(error.code === "23505" ? "You've already applied" : error.message); return; }
     toast.success("Application sent");
     qc.invalidateQueries({ queryKey: ["applications"] });
     setOpen(false);
