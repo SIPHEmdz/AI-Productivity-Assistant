@@ -14,7 +14,271 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      businesses: {
+        Row: {
+          area: string | null
+          category: Database["public"]["Enums"]["business_category"]
+          collection: boolean
+          created_at: string
+          delivery: boolean
+          description: string | null
+          hours: string | null
+          id: string
+          name: string
+          owner_id: string | null
+          owner_name: string | null
+          phone: string | null
+          rating: number
+          verified: boolean
+          whatsapp: string | null
+        }
+        Insert: {
+          area?: string | null
+          category?: Database["public"]["Enums"]["business_category"]
+          collection?: boolean
+          created_at?: string
+          delivery?: boolean
+          description?: string | null
+          hours?: string | null
+          id?: string
+          name: string
+          owner_id?: string | null
+          owner_name?: string | null
+          phone?: string | null
+          rating?: number
+          verified?: boolean
+          whatsapp?: string | null
+        }
+        Update: {
+          area?: string | null
+          category?: Database["public"]["Enums"]["business_category"]
+          collection?: boolean
+          created_at?: string
+          delivery?: boolean
+          description?: string | null
+          hours?: string | null
+          id?: string
+          name?: string
+          owner_id?: string | null
+          owner_name?: string | null
+          phone?: string | null
+          rating?: number
+          verified?: boolean
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      follows: {
+        Row: {
+          created_at: string
+          followed_business_id: string
+          follower_business_id: string
+        }
+        Insert: {
+          created_at?: string
+          followed_business_id: string
+          follower_business_id: string
+        }
+        Update: {
+          created_at?: string
+          followed_business_id?: string
+          follower_business_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_followed_business_id_fkey"
+            columns: ["followed_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_follower_business_id_fkey"
+            columns: ["follower_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opportunities: {
+        Row: {
+          budget: number | null
+          business_id: string
+          created_at: string
+          description: string | null
+          event_date: string | null
+          id: string
+          location: string | null
+          open: boolean
+          title: string
+          type: Database["public"]["Enums"]["opportunity_type"]
+        }
+        Insert: {
+          budget?: number | null
+          business_id: string
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          location?: string | null
+          open?: boolean
+          title: string
+          type?: Database["public"]["Enums"]["opportunity_type"]
+        }
+        Update: {
+          budget?: number | null
+          business_id?: string
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          location?: string | null
+          open?: boolean
+          title?: string
+          type?: Database["public"]["Enums"]["opportunity_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunities_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opportunity_applications: {
+        Row: {
+          applicant_business_id: string
+          created_at: string
+          id: string
+          message: string | null
+          opportunity_id: string
+          status: Database["public"]["Enums"]["request_status"]
+        }
+        Insert: {
+          applicant_business_id: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          opportunity_id: string
+          status?: Database["public"]["Enums"]["request_status"]
+        }
+        Update: {
+          applicant_business_id?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          opportunity_id?: string
+          status?: Database["public"]["Enums"]["request_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_applications_applicant_business_id_fkey"
+            columns: ["applicant_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunity_applications_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supply_listings: {
+        Row: {
+          available: boolean
+          business_id: string
+          created_at: string
+          description: string | null
+          id: string
+          min_order: number
+          price: number
+          title: string
+          unit: string
+        }
+        Insert: {
+          available?: boolean
+          business_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          min_order?: number
+          price: number
+          title: string
+          unit: string
+        }
+        Update: {
+          available?: boolean
+          business_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          min_order?: number
+          price?: number
+          title?: string
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supply_listings_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supply_requests: {
+        Row: {
+          buyer_business_id: string
+          created_at: string
+          id: string
+          listing_id: string
+          message: string | null
+          quantity: number
+          status: Database["public"]["Enums"]["request_status"]
+        }
+        Insert: {
+          buyer_business_id: string
+          created_at?: string
+          id?: string
+          listing_id: string
+          message?: string | null
+          quantity?: number
+          status?: Database["public"]["Enums"]["request_status"]
+        }
+        Update: {
+          buyer_business_id?: string
+          created_at?: string
+          id?: string
+          listing_id?: string
+          message?: string | null
+          quantity?: number
+          status?: Database["public"]["Enums"]["request_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supply_requests_buyer_business_id_fkey"
+            columns: ["buyer_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supply_requests_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "supply_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +287,24 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      business_category:
+        | "fast_food"
+        | "fruit_veg"
+        | "grocery"
+        | "bakery"
+        | "home_food"
+        | "catering"
+        | "delivery"
+        | "other"
+      opportunity_type:
+        | "catering"
+        | "event_supply"
+        | "bulk_produce"
+        | "delivery"
+        | "supplier"
+        | "workers"
+        | "collaboration"
+      request_status: "pending" | "accepted" | "declined"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +431,27 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      business_category: [
+        "fast_food",
+        "fruit_veg",
+        "grocery",
+        "bakery",
+        "home_food",
+        "catering",
+        "delivery",
+        "other",
+      ],
+      opportunity_type: [
+        "catering",
+        "event_supply",
+        "bulk_produce",
+        "delivery",
+        "supplier",
+        "workers",
+        "collaboration",
+      ],
+      request_status: ["pending", "accepted", "declined"],
+    },
   },
 } as const
